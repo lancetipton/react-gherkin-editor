@@ -1,6 +1,6 @@
-import { define } from 'ace-builds'
-
 /* istanbul ignore file */
+import { define } from 'ace-builds/src-noconflict/ace'
+
 define('ace/theme/jira', [
   'require',
   'exports',

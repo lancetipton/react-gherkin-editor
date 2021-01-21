@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import React, { useState } from 'react'
 import { render } from 'react-dom'
-import GherkinEditor from 'components/GherkinEditor'
+import GherkinEditor from '@smartbear/react-gherkin-editor'
 import Select from 'react-select'
 
 const steps = [
@@ -40,9 +40,9 @@ const autoCompleteFunction = (_keyword, text) => {
 
 const Preview = () => {
   const [theme, setTheme] = useState('jira')
-  const [mode, setMode] = useState('gherkin_i18n')
+  const [mode, setMode] = useState('feature')
   const [language, setLanguage] = useState('en')
-  const [value, setValue] = useState(`Feature: Support internationalisation
+  const value = `Feature: Support internationalisation
   As a polyglot coffee lover
   I can select the language on the coffee machine
   So I can practice my use of greetings in several languages
@@ -61,11 +61,10 @@ const Preview = () => {
       | language   | ready_message |
       | en         | Ready         |
       | fr         | Pret          |
-`)
+`
 
-  const onChange = value => {
-    console.log(value)
-    setValue(value)
+  const onChange = newValue => {
+    console.log(newValue)
   }
 
   const themeOptions = [
@@ -73,9 +72,9 @@ const Preview = () => {
     { label: 'cucumber', value: 'cucumber' }
   ]
   const modeOptions = [
-    { label: 'gherkin i18n', value: 'gherkin_i18n' },
-    { label: 'gherkin background i18n', value: 'gherkin_background_i18n' },
-    { label: 'gherkin scenario i18n', value: 'gherkin_scenario_i18n' }
+    { label: 'Feature', value: 'feature' },
+    { label: 'Background', value: 'background' },
+    { label: 'Scenario', value: 'scenario' }
   ]
 
   const ToolbarContent = (
@@ -106,7 +105,7 @@ const Preview = () => {
     <div style={{ padding: '5px', width: '600px' }}>
       <GherkinEditor
         initialValue={value}
-        language={language}
+        initialLanguage={language}
         onChange={onChange}
         onSubmit={onChange}
         onLanguageChange={option => setLanguage(option.value)}
@@ -126,6 +125,7 @@ const Preview = () => {
 }
 
 const root = document.createElement('div')
+
 document.body.appendChild(root)
 
 render(<Preview />, root)

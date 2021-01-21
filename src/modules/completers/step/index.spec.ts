@@ -1,5 +1,7 @@
-import { getGherkinDialect } from 'modules/dialects/gherkin_i18n'
-import StepCompleter from 'modules/step-completer'
+import { dialectFor } from '../../../modules/dialect'
+import StepCompleter from '.'
+
+const dialect = dialectFor('en')
 
 describe('StepCompleter class', () => {
   const steps = [
@@ -29,10 +31,7 @@ describe('StepCompleter class', () => {
         getLine: jest.fn().mockReturnValue('And I')
       }
       const callBackMock = jest.fn()
-      const stepCompleter = new StepCompleter(
-        autoCompleteFunctionMock,
-        getGherkinDialect
-      )
+      const stepCompleter = new StepCompleter(dialect, autoCompleteFunctionMock)
       await stepCompleter.getCompletions(
         editorMock,
         sessionMock,
@@ -50,10 +49,7 @@ describe('StepCompleter class', () => {
       const sessionMock = {
         getLine: jest.fn().mockReturnValue('I start')
       }
-      const stepCompleter = new StepCompleter(
-        autoCompleteFunctionMock,
-        getGherkinDialect
-      )
+      const stepCompleter = new StepCompleter(dialect, autoCompleteFunctionMock)
       await stepCompleter.getCompletions(
         editorMock,
         sessionMock,
@@ -71,10 +67,7 @@ describe('StepCompleter class', () => {
       const sessionMock = {
         getLine: jest.fn().mockReturnValue('I start')
       }
-      const stepCompleter = new StepCompleter(
-        autoCompleteFunctionMock,
-        getGherkinDialect
-      )
+      const stepCompleter = new StepCompleter(dialect, autoCompleteFunctionMock)
       await stepCompleter.getCompletions(
         editorMock,
         sessionMock,
