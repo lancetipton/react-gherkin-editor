@@ -13,6 +13,8 @@ describe('GherkinAnnotator', () => {
     const dialect = dialectFor('en')
     const annotator = new GherkinAnnotator(dialect, 'feature')
 
-    expect(annotator.getAnnotations('Feature: My awsome feature')).toHaveLength(0)
+    expect(annotator.getAnnotations('Feature: My awsome feature')).toHaveLength(
+      0
+    )
   })
 })

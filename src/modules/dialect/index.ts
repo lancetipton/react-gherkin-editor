@@ -27,31 +27,32 @@ export const partialDialectFor = (
 }
 
 export const keywordSetFor = (dialect: Partial<Dialect>): KeywordSet => {
-  const isDefined = value => value !== undefined
-  const trimWhiteSpace = (string: string) => string.trim()
+  const reducer = (keywords, keyword) =>
+    keyword ? [...keywords, keyword.trim()] : keywords
+
+  const featureKeywords = [
+    dialect.feature,
+    dialect.background,
+    dialect.rule,
+    dialect.scenario,
+    dialect.scenarioOutline,
+    dialect.examples
+  ]
+    .flat()
+    .reduce(reducer, [])
+
+  const stepKeywords = [
+    dialect.given,
+    dialect.when,
+    dialect.then,
+    dialect.and,
+    dialect.but
+  ]
+    .flat()
+    .reduce(reducer, [])
 
   return {
-    featureKeywords: [
-      dialect.feature,
-      dialect.background,
-      dialect.rule,
-      dialect.scenario,
-      dialect.scenarioOutline,
-      dialect.examples
-    ]
-      .filter(isDefined)
-      .flat()
-      .map(trimWhiteSpace),
-
-    stepKeywords: [
-      dialect.given,
-      dialect.when,
-      dialect.then,
-      dialect.and,
-      dialect.but
-    ]
-      .filter(isDefined)
-      .flat()
-      .map(trimWhiteSpace)
+    featureKeywords,
+    stepKeywords
   }
 }

@@ -2,32 +2,29 @@ import _isEmpty from 'lodash/isEmpty'
 import _map from 'lodash/map'
 import _orderBy from 'lodash/orderBy'
 import calculateSize from 'calculate-size'
-import { Completer } from '../index'
 import { Dialect } from '@cucumber/gherkin'
+import { Ace } from 'ace-builds'
+import { keywordSetFor } from '../../dialect'
 
-class StepCompleter implements Completer {
-  dialect: Partial<Dialect>
-  autoCompleteFunction: Function
+export type Step = {
+  name: string
+  value: string
+  score: number
+}
 
-  constructor(dialect: Partial<Dialect>, autoCompleteFunction: Function) {
-    this.dialect = dialect
-    this.autoCompleteFunction = autoCompleteFunction
-  }
+class StepCompleter implements Ace.Completer {
+  constructor(
+    private readonly dialect: Partial<Dialect>,
+    private readonly autoCompleteFunction: (
+      keyword: string,
+      text: string
+    ) => Promise<Step[]>
+  ) {}
 
-  async getCompletions(editor, session, position, _prefix, callback) {
+  async getCompletions(editor, session, position, prefix, callback) {
     const lineTokens = session.getLine(position.row).trim().split(' ')
-    // TODO: Refactor
-    const isDefined = value => value !== undefined
-    const keywords = [
-      this.dialect.given,
-      this.dialect.when,
-      this.dialect.then,
-      this.dialect.and,
-      this.dialect.but
-    ]
-      .flat()
-      .filter(isDefined)
-      .map(keyword => keyword.trim())
+    const keywordSet = keywordSetFor(this.dialect)
+    const keywords = keywordSet.stepKeywords
 
     if (lineTokens.length > 1 && keywords.includes(lineTokens[0])) {
       const keyword = lineTokens.shift()
@@ -38,7 +35,7 @@ class StepCompleter implements Completer {
         this.resizePopup(editor, completions)
       } catch (error) {
         callback(null, [])
-        throw error
+        console.error(error)
       }
     }
   }
@@ -48,8 +45,12 @@ class StepCompleter implements Completer {
       return
     }
 
-    const strings = _map(completions, 'caption')
-    const longestString = _orderBy(strings, 'length', 'desc').shift()
+    const longestString = _orderBy(
+      _map(completions, 'caption'),
+      'length',
+      'desc'
+    ).shift()
+
     const width = this.calculateVisualLength(editor, longestString)
 
     editor.completer.popup.container.style.width = `${width + 50}px`

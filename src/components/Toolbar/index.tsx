@@ -3,13 +3,11 @@ import _find from 'lodash/find'
 import React from 'react'
 import Select from 'react-select'
 
-import { LanguageDropdownContainer } from './styled'
-
 interface ToolbarProps {
   content?: React.ReactNode
   language?: string
   readOnly?: boolean
-  onLanguageChange?(option: object): void
+  onLanguageChange?(option: any): void
 }
 
 const availableLanguages = Object.entries(Languages).map(([key, language]) => ({
@@ -37,12 +35,13 @@ const Toolbar = ({
         flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '3px'
+        padding: '3px',
+        backgroundColor: 'rgb(235, 236, 240)'
       }}
       data-testid='editor-toolbar'
       className='ace-tm'
     >
-      <LanguageDropdownContainer>
+      <div style={{ minWidth: '150px' }}>
         <Select
           value={gherkinLanguage}
           options={availableLanguages}
@@ -51,7 +50,7 @@ const Toolbar = ({
           isDisabled={readOnly}
           classNamePrefix='gherkin-editor-language-select'
         />
-      </LanguageDropdownContainer>
+      </div>
       {content}
     </div>
   )

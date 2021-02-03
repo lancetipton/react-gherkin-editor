@@ -2,9 +2,7 @@ import { Dialect } from '@cucumber/gherkin'
 import escapeStringRegexp from 'escape-string-regexp'
 import { keywordSetFor } from '../../modules/dialect'
 
-export const editorHighlightRulesFor = (
-  dialect: Partial<Dialect>
-): Function => {
+export const editorHighlightRulesFor = (dialect: Partial<Dialect>) => {
   const keywordSet = keywordSetFor(dialect)
 
   return function () {

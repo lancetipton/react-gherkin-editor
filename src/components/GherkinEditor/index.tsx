@@ -11,10 +11,11 @@ import Toolbar from '../Toolbar'
 import 'ace-builds/src-noconflict/ext-language_tools'
 import '../../themes/cucumber'
 import '../../themes/jira'
+import { Step } from '../../modules/completers/step'
 
 interface GherkinEditorProps {
   activateLinter?: boolean
-  autoCompleteFunction?(): Promise<string[]>
+  autoCompleteFunction?(): Promise<Step[]>
   autoFocus?: boolean
   fontSize?: number
   hideToolbar?: boolean
@@ -28,7 +29,7 @@ interface GherkinEditorProps {
   onParse?(): void
   onSubmit?(value: string): void
   readOnly?: boolean
-  setOptions?: object
+  setOptions?: any
   showGutter?: boolean
   showPrintMargin?: boolean
   theme?: string
@@ -56,6 +57,7 @@ const defaultOptions = {
   tabSize: 2
 }
 
+// eslint-disable-next-line react/display-name
 const GherkinEditor = React.forwardRef((props: GherkinEditorProps, ref) => {
   const {
     activateLinter,
