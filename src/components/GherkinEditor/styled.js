@@ -1,8 +1,9 @@
-import styled from 'styled-components'
+import { reStyle } from '@keg-hub/re-theme/reStyle'
 
-export const EditorWrapper = styled.div`
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(223, 225, 230);
-  border-radius: 3px;
-`
+export const EditorWrapper = reStyle('div')((__, props) => ({
+  ...props?.style,
+  borderWidth: 1,
+  borderStyle: 'solid',
+  borderColor: 'rgb(223, 225, 230)',
+  borderRadius: 3,
+}))
