@@ -1,6 +1,6 @@
 {
   "name": "@ltipton/react-gherkin-editor",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Gherkin language editor for React.",
   "homepage": "https://github.com/ltipton/react-gherkin-editor",
   "private": false,
