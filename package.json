@@ -1,15 +1,19 @@
 {
-  "name": "@smartbear/react-gherkin-editor",
-  "version": "2.4.8",
+  "name": "@ltipton/react-gherkin-editor",
+  "version": "0.0.0",
   "description": "A Gherkin language editor for React.",
-  "homepage": "https://github.com/SmartBear/react-gherkin-editor",
+  "homepage": "https://github.com/ltipton/react-gherkin-editor",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SmartBear/react-gherkin-editor"
+    "url": "https://github.com/ltipton/react-gherkin-editor"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "author": "SmartBear Software",
+  "author": "SmartBear Software (Modified by Lance Tipton)",
   "license": "MIT",
   "files": [
     "dist"

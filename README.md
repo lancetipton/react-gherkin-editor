@@ -11,26 +11,28 @@ A Gherkin language editor for React.
 
 React Gherkin Editor is a wrapper arround [React Ace Editor](https://github.com/securingsincity/react-ace) specially designed for Gherkin.
 
+It was originally forked from [https://github.com/SmartBear/react-gherkin-editor](this repo). I removed a number of dependencies, and changed the styles to better suite my needs
+
 Features:
 
 - Gherkin syntax highlighting
 - Gherkin keyword snippets
 - Easy to provide step autocompletions (Promise based)
 - Gherkin I18n support
-- Special themes for Jira and Cucumber
+- Special theme herkin for writing feature files
 
 ## Installation
 
 Using npm:
 
 ```
-npm install --save @smartbear/react-gherkin-editor
+npm install --save @ltipton/react-gherkin-editor
 ```
 
 Using yarn:
 
 ```
-yarn add @smartbear/react-gherkin-editor
+yarn add @ltipton/react-gherkin-editor
 ```
 
 ## Basic Usage
@@ -38,7 +40,7 @@ yarn add @smartbear/react-gherkin-editor
 ```javascript
 import React from 'react'
 import { render } from 'react-dom'
-import ReactGherkinEditor from '@smartbear/react-gherkin-editor'
+import ReactGherkinEditor from '@ltipton/react-gherkin-editor'
 
 const root = document.createElement('div')
 document.body.appendChild(root)
@@ -92,11 +94,11 @@ render(
 
 [React Ace Editor](https://github.com/securingsincity/react-ace)
 
-[version-badge]: https://img.shields.io/npm/v/@smartbear/react-gherkin-editor
-[package]: https://www.npmjs.com/package/@smartbear/react-gherkin-editor
-[ci-badge]: https://img.shields.io/github/workflow/status/smartbear/react-gherkin-editor/CI?logo=github
-[ci]: https://github.com/SmartBear/react-gherkin-editor/actions?query=workflow%3ACI
-[dependencies-badge]: https://img.shields.io/david/smartbear/react-gherkin-editor
-[dependencies]: https://david-dm.org/smartbear/react-gherkin-editor
-[license-badge]: https://img.shields.io/npm/l/@smartbear/react-gherkin-editor
-[license]: https://github.com/SmartBear/react-gherkin-editor/blob/master/LICENSE
+[version-badge]: https://img.shields.io/npm/v/@ltipton/react-gherkin-editor
+[package]: https://www.npmjs.com/package/@ltipton/react-gherkin-editor
+[ci-badge]: https://img.shields.io/github/workflow/status/ltipton/react-gherkin-editor/CI?logo=github
+[ci]: https://github.com/ltipton/react-gherkin-editor/actions?query=workflow%3ACI
+[dependencies-badge]: https://img.shields.io/david/ltipton/react-gherkin-editor
+[dependencies]: https://david-dm.org/ltipton/react-gherkin-editor
+[license-badge]: https://img.shields.io/npm/l/@ltipton/react-gherkin-editor
+[license]: https://github.com/ltipton/react-gherkin-editor/blob/master/LICENSE
