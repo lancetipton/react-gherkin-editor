@@ -11,7 +11,7 @@ A Gherkin language editor for React.
 
 React Gherkin Editor is a wrapper arround [React Ace Editor](https://github.com/securingsincity/react-ace) specially designed for Gherkin.
 
-It was originally forked from [https://github.com/SmartBear/react-gherkin-editor](this repo). I removed a number of dependencies, and changed the styles to better suite my needs
+It was originally forked from [this repo](https://github.com/SmartBear/react-gherkin-editor). I removed a number of dependencies, and changed the styles to better suite my needs
 
 Features:
 

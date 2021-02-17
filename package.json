@@ -28,10 +28,7 @@
     "build": "concurrently yarn:build:types yarn:build:js",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
-    "prepack": "rm -rf build && yarn build",
-    "postpack": "rm -rf build",
-    "push": "git push --follow-tags",
-    "postpublish": "echo The new package has been released! Run \\\"yarn push\\\" to push the release commit and tag."
+    "push": "git push --follow-tags"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.13",
