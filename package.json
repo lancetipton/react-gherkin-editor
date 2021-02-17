@@ -2,14 +2,14 @@
   "name": "@ltipton/react-gherkin-editor",
   "version": "0.0.2",
   "description": "A Gherkin language editor for React.",
-  "homepage": "https://github.com/ltipton/react-gherkin-editor",
+  "homepage": "https://github.com/lancetipton/react-gherkin-editor",
   "private": false,
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ltipton/react-gherkin-editor"
+    "url": "https://github.com/lancetipton/react-gherkin-editor"
   },
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
