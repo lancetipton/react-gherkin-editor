@@ -82,7 +82,7 @@ describe('StepCompleter class', () => {
         null,
         callBackMock
       )
-      expect(editorMock.completer.popup.container.style.width).toEqual(0)
+      expect(editorMock.completer.popup.container.style.width).toEqual('200px')
     })
   })
 })
