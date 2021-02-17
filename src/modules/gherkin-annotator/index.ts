@@ -1,6 +1,18 @@
-import { debounce } from 'lodash'
 import GherkinLinter, { OnParseCallback } from '../../lib/gherkin-linter'
 import { LanguageIdentifier } from '../../lib/gherkin-languages'
+
+const debounce = (func, wait) => {
+  let timeout
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout)
+      typeof func === 'function' && func(...args)
+    }
+
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
+}
 
 export default class GherkinAnnotator {
   private linter:GherkinLinter
@@ -42,16 +54,11 @@ export default class GherkinAnnotator {
 
   async annotateNow(value) {
     const errors = await this.lint(value)
+    if (!Array.isArray(errors)) return
 
-    if (!Array.isArray(errors)) {
-      return
-    }
-
-    if (errors.length > 0) {
-      this.session.setAnnotations(errors)
-    } else {
-      this.session.clearAnnotations()
-    }
+    errors.length > 0
+      ? this.session.setAnnotations(errors)
+      : this.session.clearAnnotations()
   }
 
   async lint(value) {

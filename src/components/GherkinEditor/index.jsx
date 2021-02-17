@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 import AceEditor from 'react-ace'
 import { require as acequire } from 'ace-builds'
-import { Resizable } from 're-resizable'
 import KeywordCompleter from '../../modules/keyword-completer'
 import StepCompleter from '../../modules/step-completer'
 import {
@@ -18,13 +17,10 @@ import {
   getGherkinDialect as getScenarioDialect
 } from '../../modules/dialects/gherkin_scenario_i18n'
 import GherkinAnnotator from '../../modules/gherkin-annotator'
-import Toolbar from '../Toolbar'
-import { EditorWrapper } from './styled'
 
 import 'ace-builds/src-noconflict/ext-language_tools'
 
-import '../../themes/jira'
-import '../../themes/cucumber'
+import '../../themes/herkin'
 
 import '../../modules/mode/gherkin_i18n'
 import '../../modules/mode/gherkin_background_i18n'
@@ -44,21 +40,26 @@ const getGherkinDialectFunctions = {
 
 const defaultOptions = {
   fontFamily: [
-    "'SFMono-Medium'",
-    "'SF Mono'",
-    "'Segoe UI Mono'",
-    "'Roboto Mono'",
+    'Monaco',
     "'Ubuntu Mono'",
     'Menlo',
     'Consolas',
-    'Courier',
     'monospace'
   ].join(', '),
   enableBasicAutocompletion: true,
   enableLiveAutocompletion: true,
-  showLineNumbers: false,
+  showLineNumbers: true,
   displayIndentGuides: false,
+  fixedWidthGutter: true,
   tabSize: 2
+}
+
+const EditorWrapper = props => {
+  return (
+    <div className={props.className || 'gherkin-editor-wrapper'} style={props.style} >
+      {props.children}
+    </div>
+  )
 }
 
 let gherkinAnnotator = null
@@ -73,7 +74,6 @@ const GherkinEditor = React.forwardRef((props, ref) => {
     activateLinter,
     autoCompleteFunction,
     autoFocus,
-    hideToolbar,
     initialValue,
     language,
     mode,
@@ -83,9 +83,12 @@ const GherkinEditor = React.forwardRef((props, ref) => {
     readOnly,
     setOptions,
     showGutter,
+    scrollMargin,
+    showPrintMargin,
+    style,
     theme,
-    toolbarContent,
-    uniqueId
+    uniqueId,
+    RootComponent,
   } = props
 
   const setGherkinDialect = setGherkinDialectFunctions[mode] || setDialect
@@ -93,9 +96,7 @@ const GherkinEditor = React.forwardRef((props, ref) => {
   const isLinterActivated = activateLinter && showGutter
 
   useEffect(() => {
-    if (autoFocus) {
-      aceEditorRef.current.editor.focus()
-    }
+    autoFocus && aceEditorRef.current.editor.focus()
   }, [autoFocus])
 
   useEffect(() => {
@@ -116,11 +117,23 @@ const GherkinEditor = React.forwardRef((props, ref) => {
   useEffect(() => {
     setGherkinDialect(currentLanguage)
 
-    aceEditorRef.current.editor.session.setMode({
+    const editor = aceEditorRef.current.editor
+    if(!editor) return
+
+    scrollMargin && editor.renderer.setScrollMargin(scrollMargin)
+    editor.setShowPrintMargin(showPrintMargin)
+    editor.session.setMode({
       path: `ace/mode/${mode}`,
       v: Date.now()
     })
-  }, [setGherkinDialect, currentLanguage, mode])
+
+  }, [
+    mode,
+    scrollMargin,
+    showPrintMargin,
+    currentLanguage,
+    setGherkinDialect,
+  ])
 
   useEffect(() => {
     if (!isLinterActivated) {
@@ -130,11 +143,10 @@ const GherkinEditor = React.forwardRef((props, ref) => {
 
     const session = aceEditorRef.current.editor.getSession()
 
-    if (!gherkinAnnotator) {
-      gherkinAnnotator = new GherkinAnnotator(session, onParse)
-    } else {
-      gherkinAnnotator.setSession(session)
-    }
+    !gherkinAnnotator
+      ? (gherkinAnnotator = new GherkinAnnotator(session, onParse))
+      : gherkinAnnotator.setSession(session)
+
   }, [isLinterActivated])
 
   useEffect(() => {
@@ -153,14 +165,6 @@ const GherkinEditor = React.forwardRef((props, ref) => {
     console.warn('activateLinter requires showGutter to be true')
   }
 
-  const onResizeStop = (_event, _direction, _refToElement, delta) => {
-    setHeight(height + delta.height)
-  }
-
-  const languageChangeHandler = option => {
-    setCurrentLanguage(option.value)
-    onLanguageChange(option)
-  }
 
   const onChangeHandler = (newValue, ...args) => {
     if (gherkinAnnotator) {
@@ -173,59 +177,34 @@ const GherkinEditor = React.forwardRef((props, ref) => {
   const options = { ...defaultOptions, ...setOptions }
 
   return (
-    <EditorWrapper>
-      {!hideToolbar && (
-        <Toolbar
-          content={toolbarContent}
-          language={currentLanguage}
-          readOnly={readOnly}
-          onLanguageChange={languageChangeHandler}
-        />
-      )}
-      <Resizable
-        size={{ width: '100%', height: `${height}px` }}
-        onResizeStop={onResizeStop}
-        enable={{
-          top: false,
-          right: false,
-          bottom: true,
-          left: false,
-          topRight: false,
-          bottomRight: false,
-          bottomLeft: false,
-          topLeft: false
-        }}
-      >
-        <AceEditor
-          {...props}
-          onChange={onChangeHandler}
-          ref={aceEditorRef}
-          theme={theme}
-          value={initialValue}
-          name={uniqueId}
-          editorProps={{ $blockScrolling: true }}
-          setOptions={options}
-          height={`${height}px`}
-          commands={[
-            {
-              name: 'test',
-              bindKey: { win: 'Ctrl-Enter', mac: 'Cmd-Enter' },
-              exec: editor => onSubmit(editor.getValue())
-            }
-          ]}
-        />
-      </Resizable>
-    </EditorWrapper>
+    <RootComponent style={style} >
+      <AceEditor
+        {...props}
+        onChange={onChangeHandler}
+        ref={aceEditorRef}
+        theme={theme}
+        value={initialValue}
+        name={uniqueId}
+        editorProps={{ $blockScrolling: true }}
+        setOptions={options}
+        height={`${height}px`}
+        commands={[
+          {
+            name: 'test',
+            bindKey: { win: 'Ctrl-Enter', mac: 'Cmd-Enter' },
+            exec: editor => onSubmit(editor.getValue())
+          }
+        ]}
+      />
+    </RootComponent>
   )
 })
 
 GherkinEditor.propTypes = {
   initialValue: PropTypes.string,
   language: PropTypes.string,
-  hideToolbar: PropTypes.bool,
   readOnly: PropTypes.bool,
   uniqueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  toolbarContent: PropTypes.node,
   onChange: PropTypes.func,
   onSubmit: PropTypes.func,
   autoCompleteFunction: PropTypes.func,
@@ -242,15 +221,21 @@ GherkinEditor.propTypes = {
   width: PropTypes.string,
   showPrintMargin: PropTypes.bool,
   showGutter: PropTypes.bool,
+  scrollMargin: PropTypes.array,
   highlightActiveLine: PropTypes.bool,
   activateLinter: PropTypes.bool,
-  setOptions: PropTypes.object
+  setOptions: PropTypes.object,
+  RootComponent: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.elementType,
+    PropTypes.element,
+    PropTypes.func,
+  ])
 }
 
 GherkinEditor.defaultProps = {
   initialValue: '',
   language: 'en',
-  hideToolbar: false,
   readOnly: false,
   uniqueId: Math.random().toString(36).substr(2, 9),
   onChange: () => {},
@@ -265,9 +250,11 @@ GherkinEditor.defaultProps = {
   width: '100%',
   showPrintMargin: false,
   showGutter: false,
+  scrollMargin: [0, 0, 0, 0],
   highlightActiveLine: false,
   activateLinter: false,
-  setOptions: {}
+  setOptions: {},
+  RootComponent: EditorWrapper,
 }
 
 export default GherkinEditor

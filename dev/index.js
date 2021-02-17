@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import { render } from 'react-dom'
 import GherkinEditor from 'components/GherkinEditor'
-import Select from 'react-select'
 
 const steps = [
   'I start the coffee machine using language "lang"',
@@ -39,9 +38,6 @@ const autoCompleteFunction = (_keyword, text) => {
 }
 
 const Preview = () => {
-  const [theme, setTheme] = useState('jira')
-  const [mode, setMode] = useState('gherkin_i18n')
-  const [language, setLanguage] = useState('en')
   const [value, setValue] = useState(`Feature: Support internationalisation
   As a polyglot coffee lover
   I can select the language on the coffee machine
@@ -53,7 +49,7 @@ const Preview = () => {
     Then message "Bye" should be displayed
 
   Scenario Outline: Messages are based on language
-  # Well, sometimes, you just get a coffee.
+    # Well, sometimes, you just get a coffee.
     When I start the coffee machine using language <language>
     Then message <ready_message> should be displayed
 
@@ -68,52 +64,17 @@ const Preview = () => {
     setValue(value)
   }
 
-  const themeOptions = [
-    { label: 'jira', value: 'jira' },
-    { label: 'cucumber', value: 'cucumber' }
-  ]
-  const modeOptions = [
-    { label: 'gherkin i18n', value: 'gherkin_i18n' },
-    { label: 'gherkin background i18n', value: 'gherkin_background_i18n' },
-    { label: 'gherkin scenario i18n', value: 'gherkin_scenario_i18n' }
-  ]
-
-  const ToolbarContent = (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <span style={{ marginRight: '8px' }}>Theme</span>
-      <Select
-        styles={{
-          control: provided => ({ ...provided, marginRight: '20px' }),
-          singleValue: () => ({ display: 'flex' })
-        }}
-        onChange={option => setTheme(option.value)}
-        options={themeOptions}
-        defaultValue={themeOptions[0]}
-      />
-      <span style={{ marginRight: '8px' }}>Mode</span>
-      <Select
-        styles={{
-          singleValue: () => ({ display: 'flex' })
-        }}
-        onChange={option => setMode(option.value)}
-        options={modeOptions}
-        defaultValue={modeOptions[0]}
-      />
-    </div>
-  )
-
   return (
     <div style={{ padding: '5px', width: '600px' }}>
       <GherkinEditor
         initialValue={value}
-        language={language}
+        language={'en'}
         onChange={onChange}
         onSubmit={onChange}
         onLanguageChange={option => setLanguage(option.value)}
-        theme={theme}
-        mode={mode}
+        theme={'herkin'}
+        mode={'gherkin_i18n'}
         autoCompleteFunction={autoCompleteFunction}
-        toolbarContent={ToolbarContent}
         autoFocus
         activateLinter
         showGutter

@@ -1,7 +1,9 @@
 /* istanbul ignore file */
 import { getGherkinDialect } from '../dialects/gherkin_background_i18n'
-import escapeStringRegexp from 'escape-string-regexp'
+import { escapeStringRegexp } from './escapeStringRegexp'
 import { define } from 'ace-builds'
+
+
 
 define('ace/mode/gherkin_background_highlight_rules', [
   'require',
@@ -27,7 +29,7 @@ define('ace/mode/gherkin_background_highlight_rules', [
         },
         {
           token: 'comment',
-          regex: '#.*$'
+          regex: '(?:^\\s*)#.*$'
         },
         {
           token: 'keyword',
@@ -42,6 +44,10 @@ define('ace/mode/gherkin_background_highlight_rules', [
           token: 'string', // " string
           regex: '"',
           next: 'qqstring'
+        },
+        {
+          token: 'alternate',
+          regex: '\\s*\\S*\\/\\S*\\s*'
         },
         {
           token: 'text',

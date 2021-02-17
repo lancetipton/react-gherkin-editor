@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 import { getGherkinDialect } from '../dialects/gherkin_scenario_i18n'
-import escapeStringRegexp from 'escape-string-regexp'
+import { escapeStringRegexp } from './escapeStringRegexp'
 import { define } from 'ace-builds'
 
 define('ace/mode/gherkin_scenario_highlight_rules', [
@@ -28,7 +28,7 @@ define('ace/mode/gherkin_scenario_highlight_rules', [
         },
         {
           token: 'comment',
-          regex: '#.*$'
+          regex: '(?:^\\s*)#.*$'
         },
         {
           token: 'keyword',
@@ -48,6 +48,10 @@ define('ace/mode/gherkin_scenario_highlight_rules', [
           token: 'string', // " string
           regex: '"',
           next: 'qqstring'
+        },
+        {
+          token: 'alternate',
+          regex: '\\s*\\S*\\/\\S*\\s*'
         },
         {
           token: 'text',
