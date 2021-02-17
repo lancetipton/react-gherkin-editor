@@ -5,13 +5,28 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _lodash = require("lodash");
-
 var _gherkinLinter = _interopRequireDefault(require("../../lib/gherkin-linter"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    const later = () => {
+      clearTimeout(timeout);
+      typeof func === 'function' && func.apply(void 0, args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
 
 class GherkinAnnotator {
   constructor(session, onParse) {
@@ -24,7 +39,7 @@ class GherkinAnnotator {
 
     _defineProperty(this, "mode", '');
 
-    _defineProperty(this, "debouncedAnnotate", (0, _lodash.debounce)(value => {
+    _defineProperty(this, "debouncedAnnotate", debounce(value => {
       this.annotateNow(value);
     }, 250));
 
@@ -60,16 +75,8 @@ class GherkinAnnotator {
 
   async annotateNow(value) {
     const errors = await this.lint(value);
-
-    if (!Array.isArray(errors)) {
-      return;
-    }
-
-    if (errors.length > 0) {
-      this.session.setAnnotations(errors);
-    } else {
-      this.session.clearAnnotations();
-    }
+    if (!Array.isArray(errors)) return;
+    errors.length > 0 ? this.session.setAnnotations(errors) : this.session.clearAnnotations();
   }
 
   async lint(value) {

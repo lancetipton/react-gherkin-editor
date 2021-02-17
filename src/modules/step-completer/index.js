@@ -5,7 +5,7 @@ const calculateSize = (str, { fontSize = 16, font }) => {
   return str
     .split('')
     .map(c => c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg)
-    .reduce((cur, acc) => acc + cur) * fontSize
+    .reduce((cur, acc) => acc + cur, '') * fontSize
 }
 
 class StepCompleter {

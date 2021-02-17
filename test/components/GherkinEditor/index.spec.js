@@ -35,7 +35,7 @@ describe('GherkinEditor', () => {
       const editor = ref.current.editor
 
       expect(editor.getOption('fontFamily')).toEqual(
-        "'Monaco', 'Ubuntu Mono', 'Menlo', 'Consolas', 'monospace'"
+        "Monaco, 'Ubuntu Mono', Menlo, Consolas, monospace"
       )
 
       expect(editor.getOption('enableBasicAutocompletion')).toBe(true)
@@ -60,7 +60,7 @@ describe('GherkinEditor', () => {
       const editor = ref.current.editor
 
       expect(editor.getOption('fontFamily')).toEqual(
-        "'SFMono-Medium', 'SF Mono', 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Mono', Menlo, Consolas, Courier, monospace"
+        "Monaco, 'Ubuntu Mono', Menlo, Consolas, monospace"
       )
       expect(editor.getOption('enableBasicAutocompletion')).toBe(true)
       expect(editor.getOption('enableLiveAutocompletion')).toBe(true)

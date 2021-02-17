@@ -5,7 +5,7 @@
     "module": "commonjs",
     "jsx": "preserve",
     "declaration": true,
-    "outDir": "dist",
+    "outDir": "build",
     "strict": false, // TODO: set to true after migrating to TS
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

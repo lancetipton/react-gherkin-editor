@@ -11,7 +11,7 @@ export default class GherkinAnnotator {
     setLanguage(language: any): void;
     setMode(mode: 'gherkin_background_i18n' | 'gherkin_scenario_i18n' | ''): void;
     annotate(value: any): void;
-    debouncedAnnotate: any;
+    debouncedAnnotate: (...args: any[]) => void;
     annotateNow(value: any): Promise<void>;
     lint(value: any): Promise<object[]>;
 }

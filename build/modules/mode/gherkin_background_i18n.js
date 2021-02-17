@@ -1,32 +1,29 @@
 "use strict";
 
-var _gherkin_scenario_i18n = require("../dialects/gherkin_scenario_i18n");
+var _gherkin_background_i18n = require("../dialects/gherkin_background_i18n");
 
-var _escapeStringRegexp = _interopRequireDefault(require("escape-string-regexp"));
+var _escapeStringRegexp = require("./escapeStringRegexp");
 
 var _aceBuilds = require("ace-builds");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /* istanbul ignore file */
-(0, _aceBuilds.define)('ace/mode/gherkin_scenario_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function (acequire, exports, module) {
+(0, _aceBuilds.define)('ace/mode/gherkin_background_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function (acequire, exports, _module) {
   const oop = acequire('../lib/oop');
   const TextHighlightRules = acequire('./text_highlight_rules').TextHighlightRules;
   const stringEscape = '\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv\'"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})';
 
   const GherkinHighlightRules = function () {
-    const labels = (0, _gherkin_scenario_i18n.getGherkinDialect)().labels;
-    const keywords = (0, _gherkin_scenario_i18n.getGherkinDialect)().keywords;
+    const keywords = (0, _gherkin_background_i18n.getGherkinDialect)().keywords;
     this.$rules = {
       start: [{
         token: 'constant.numeric',
         regex: '(?:(?:[1-9]\\d*)|(?:0))'
       }, {
         token: 'comment',
-        regex: '#.*$'
+        regex: '(?:^\\s*)#.*$'
       }, {
         token: 'keyword',
-        regex: '(?:' + labels.map(_escapeStringRegexp.default).join('|') + '):|(?:' + keywords.map(_escapeStringRegexp.default).join('|') + ')\\b'
+        regex: '(?:' + keywords.map(_escapeStringRegexp.escapeStringRegexp).join('|') + ')\\b'
       }, {
         token: 'string',
         // multi line """ string start
@@ -37,6 +34,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         // " string
         regex: '"',
         next: 'qqstring'
+      }, {
+        token: 'alternate',
+        regex: '\\s*\\S*\\/\\S*\\s*'
       }, {
         token: 'text',
         regex: '^\\s*(?=@[\\w])',
@@ -108,10 +108,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   oop.inherits(GherkinHighlightRules, TextHighlightRules);
   exports.GherkinHighlightRules = GherkinHighlightRules;
 });
-(0, _aceBuilds.define)('ace/mode/gherkin_scenario_i18n', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text', 'ace/mode/gherkin_scenario_highlight_rules'], function (acequire, exports, module) {
+(0, _aceBuilds.define)('ace/mode/gherkin_background_i18n', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text', 'ace/mode/gherkin_background_highlight_rules'], function (acequire, exports, _module) {
   const oop = acequire('../lib/oop');
   const TextMode = acequire('./text').Mode;
-  const GherkinHighlightRules = acequire('./gherkin_scenario_highlight_rules').GherkinHighlightRules;
+  const GherkinHighlightRules = acequire('./gherkin_background_highlight_rules').GherkinHighlightRules;
 
   const Mode = function () {
     this.HighlightRules = GherkinHighlightRules;
@@ -121,11 +121,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   oop.inherits(Mode, TextMode);
   (function () {
     this.lineCommentStart = '#';
-    this.$id = 'ace/mode/gherkin_scenario_i18n';
+    this.$id = 'ace/mode/gherkin_background_i18n';
 
-    this.getNextLineIndent = function (state, line, tab) {
-      const labels = (0, _gherkin_scenario_i18n.getGherkinDialect)().labels;
-      const keywords = (0, _gherkin_scenario_i18n.getGherkinDialect)().keywords;
+    this.getNextLineIndent = function (state, line, _tab) {
+      const labels = (0, _gherkin_background_i18n.getGherkinDialect)().labels;
+      const keywords = (0, _gherkin_background_i18n.getGherkinDialect)().keywords;
       let indent = this.$getIndent(line);
       const space2 = '  ';
       const tokenizedLine = this.getTokenizer().getLineTokens(line, state);
@@ -140,9 +140,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
 
       if (state === 'start') {
-        if (line.match(labels.map(_escapeStringRegexp.default).join(':|') + ':')) {
+        if (line.match(labels.map(_escapeStringRegexp.escapeStringRegexp).join(':|') + ':')) {
           indent += space2;
-        } else if (line.match('(' + keywords.map(_escapeStringRegexp.default).join('|') + ').+(:)$|Examples:')) {
+        } else if (line.match('(' + keywords.map(_escapeStringRegexp.escapeStringRegexp).join('|') + ').+(:)$|Examples:')) {
           indent += space2;
         } else if (line.match('\\*.+')) {
           indent += '* ';

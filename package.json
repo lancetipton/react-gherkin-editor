@@ -11,12 +11,12 @@
     "type": "git",
     "url": "https://github.com/ltipton/react-gherkin-editor"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "author": "SmartBear Software (Modified by Lance Tipton)",
   "license": "MIT",
   "files": [
-    "dist"
+    "build"
   ],
   "scripts": {
     "start": "webpack serve --client-log-level silent",
@@ -27,9 +27,9 @@
     "type-check": "tsc --noEmit",
     "build": "concurrently yarn:build:types yarn:build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir dist --extensions \".js,.jsx,.ts,.tsx\"",
-    "prepack": "rm -rf dist && yarn build",
-    "postpack": "rm -rf dist",
+    "build:js": "babel src --out-dir build --extensions \".js,.jsx,.ts,.tsx\"",
+    "prepack": "rm -rf build && yarn build",
+    "postpack": "rm -rf build",
     "push": "git push --follow-tags",
     "postpublish": "echo The new package has been released! Run \\\"yarn push\\\" to push the release commit and tag."
   },

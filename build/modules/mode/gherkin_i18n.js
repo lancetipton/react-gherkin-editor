@@ -2,11 +2,9 @@
 
 var _gherkin_i18n = require("../dialects/gherkin_i18n");
 
-var _escapeStringRegexp = _interopRequireDefault(require("escape-string-regexp"));
+var _escapeStringRegexp = require("./escapeStringRegexp");
 
 var _aceBuilds = require("ace-builds");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* istanbul ignore file */
 (0, _aceBuilds.define)('ace/mode/gherkin_highlight_rules', ['require', 'exports', 'module', 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function (acequire, exports, module) {
@@ -23,10 +21,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         regex: '(?:(?:[1-9]\\d*)|(?:0))'
       }, {
         token: 'comment',
-        regex: '#.*$'
+        regex: '(?:^\\s*)#.*$'
       }, {
         token: 'keyword',
-        regex: '(?:' + labels.map(_escapeStringRegexp.default).join('|') + '):|(?:' + keywords.map(_escapeStringRegexp.default).join('|') + ')\\b'
+        regex: '(?:' + labels.map(_escapeStringRegexp.escapeStringRegexp).join('|') + '):|(?:' + keywords.map(_escapeStringRegexp.escapeStringRegexp).join('|') + ')\\b'
       }, {
         token: 'string',
         // multi line """ string start
@@ -37,6 +35,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         // " string
         regex: '"',
         next: 'qqstring'
+      }, {
+        token: 'alternate',
+        regex: '\\s*\\S*\\/\\S*\\s*'
       }, {
         token: 'text',
         regex: '^\\s*(?=@[\\w])',
@@ -140,9 +141,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
 
       if (state === 'start') {
-        if (line.match(labels.map(_escapeStringRegexp.default).join(':|') + ':')) {
+        if (line.match(labels.map(_escapeStringRegexp.escapeStringRegexp).join(':|') + ':')) {
           indent += space2;
-        } else if (line.match('(' + keywords.map(_escapeStringRegexp.default).join('|') + ').+(:)$|Examples:')) {
+        } else if (line.match('(' + keywords.map(_escapeStringRegexp.escapeStringRegexp).join('|') + ').+(:)$|Examples:')) {
           indent += space2;
         } else if (line.match('\\*.+')) {
           indent += '* ';
